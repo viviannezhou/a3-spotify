@@ -16,7 +16,6 @@ export class SpotifyService {
   constructor(private http:HttpClient) { }
 
   private sendRequestToExpress(endpoint:string):Promise<any> {
-    //TODO: use the injected http Service to make a get request to the Express endpoint and return the response.
     //Specifically, update the URI according to the base URL for express and the endpoint.
     var uri:string = this.expressBaseUrl + endpoint;
 
@@ -37,8 +36,7 @@ export class SpotifyService {
   }
 
   searchFor(category:string, resource:string):Promise<ResourceData[]> {
-    //TODO: identify the search endpoint in the express webserver (routes/index.js) and send the request to express.
-    // build the endpoint like /search/artist/taylor%20switft, where the resource is encoded with encodeURIComponent().
+    // build the endpoint like /search/artist/taylor%20swift, where the resource is encoded with encodeURIComponent().
     var endpoint:string = '/search/' + category + '/' + encodeURIComponent(resource);
 
     return this.sendRequestToExpress(endpoint).then((data) => {
@@ -76,17 +74,23 @@ export class SpotifyService {
   }
 
   getAlbum(albumId:string):Promise<AlbumData> {
-    //TODO: use the album endpoint to make a request to express.
-    return null as any;
+    //get one album and turn it into an AlbumData object and return it.
+    return this.sendRequestToExpress('/album/' + encodeURIComponent(albumId)).then((data) => {
+      return new AlbumData(data);
+    });
   }
 
   getTracksForAlbum(albumId:string):Promise<TrackData[]> {
-    //TODO: use the tracks for album endpoint to make a request to express.
-    return null as any;
+    //album tracks come back in a list called "items"
+    return this.sendRequestToExpress('/album-tracks/' + encodeURIComponent(albumId)).then((data) => {
+      return data['items'].map((item) => new TrackData(item));
+    });
   }
-
+  
   getTrack(trackId:string):Promise<TrackData> {
-    //TODO: use the track endpoint to make a request to express.
-    return null as any;
+    //get one track and turn it into a TrackData object and return it.
+    return this.sendRequestToExpress('/track/' + encodeURIComponent(trackId)).then((data) => {
+      return new TrackData(data);
+    });
   }
 }

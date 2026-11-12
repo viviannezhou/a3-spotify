@@ -13,10 +13,19 @@ export class AboutComponent implements OnInit {
   profile_link:string = null;
 
 
-  //TODO: inject the Spotify service
-  constructor() { }
+  // inject the Spotify service so this component can use it to get the "about me" information from Spotify.
+  constructor(private spotifyService: SpotifyService) { }
 
   ngOnInit() {
+  }
+
+  // runs when the "load info" button is clicked
+  loadAboutMe() {
+    this.spotifyService.aboutMe().then((data) => {
+      this.name = data.name;
+      this.profile_pic = data.imageURL;
+      this.profile_link = data.spotifyProfile;
+    });
   }
 
    /*TODO: create a function which gets the "about me" information from Spotify when the button in the view is clicked.

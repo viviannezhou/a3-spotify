@@ -8,7 +8,8 @@ import { Popularity } from 'src/app/data/popularity';
     standalone: false
 })
 export class ThermometerComponent implements OnInit {
-  //TODO: define Input fields and bind them to the template.
+  //the popularity to display (has the percent and color), passed in from the page using this component.
+  @Input() popularity:Popularity;
 
   constructor() { }
 
